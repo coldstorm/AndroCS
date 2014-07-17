@@ -18,7 +18,7 @@
         </activity>
 
         <service
-            android:name=".IRCService"
+            android:name=".services.IRCService"
             android:enabled="false"
             android:exported="false" >
         </service>

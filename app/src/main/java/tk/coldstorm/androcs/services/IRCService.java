@@ -1,4 +1,4 @@
-package tk.coldstorm.androcs;
+package tk.coldstorm.androcs.services;
 
 import android.app.Service;
 import android.content.Intent;
