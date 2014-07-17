@@ -3,6 +3,7 @@ package tk.coldstorm.androcs;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -62,11 +63,13 @@ public class MainActivity
 
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerFragment sender, int position, String content) {
-        // handle the item selection based on the sender
+        // Handle the item selection based on the sender
         if (sender == mLeftNavigationDrawerFragment) {
             replaceFragment(ChatFragment.newInstance(content));
+            // Set the title to this fragment's title; it will be updated next time restoreActionBar() is called.
+            mTitle = content;
         } else if (sender == mRightNavigationDrawerFragment) {
-            // user was selected
+            showUserDialog(UserDialogFragment.newInstance(content));
         }
     }
 
@@ -115,6 +118,13 @@ public class MainActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, replacer)
                 .commit();
+    }
+
+    public void showUserDialog(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        UserDialogFragment userDialogFragment = (UserDialogFragment) fragment;
+
+        userDialogFragment.show(fragmentManager, null);
     }
     //endregion
 }

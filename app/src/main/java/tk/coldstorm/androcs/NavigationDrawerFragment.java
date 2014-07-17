@@ -47,6 +47,7 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private String[] mDrawerItemsList;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -151,7 +152,7 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerListView.setItemChecked(position, true);
 
             if (mCallbacks != null) {
-                mCallbacks.onNavigationDrawerItemSelected(this, position, (String) mDrawerListView.getSelectedItem());
+                mCallbacks.onNavigationDrawerItemSelected(this, position, mDrawerItemsList[position]);
             }
         }
         if (mDrawerLayout != null) {
@@ -186,6 +187,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void setUp(int fragmentId, DrawerLayout drawerLayout, String[] drawerListItems) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
+        mDrawerItemsList = drawerListItems;
 
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
