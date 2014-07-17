@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -22,7 +23,8 @@ import tk.coldstorm.androcs.R;
 public class MainActivity
         extends Activity
         implements
-            NavigationDrawerFragment.NavigationDrawerCallbacks {
+            NavigationDrawerFragment.NavigationDrawerCallbacks,
+            ChatFragment.OnFragmentInteractionListener {
 
     /**
      * Fragments managing the behaviors, interactions and presentation of the navigation drawer.
@@ -35,6 +37,7 @@ public class MainActivity
      */
     private CharSequence mTitle;
 
+    //region Overrides
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,17 +61,14 @@ public class MainActivity
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+    public void onNavigationDrawerItemSelected(NavigationDrawerFragment sender, int position, String content) {
+        // handle the item selection based on the sender
+        if (sender == mLeftNavigationDrawerFragment) {
+            replaceFragment(ChatFragment.newInstance(content));
+        } else if (sender == mRightNavigationDrawerFragment) {
+            // user was selected
+        }
     }
-
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,4 +94,27 @@ public class MainActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //
+    }
+    //endregion
+
+    //region Helpers
+    public void restoreActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+    }
+
+    public void replaceFragment(Fragment replacer) {
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, replacer)
+                .commit();
+    }
+    //endregion
 }
