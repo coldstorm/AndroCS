@@ -12,7 +12,7 @@ public class UserItem implements Parcelable {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    private void setUserName(String userName) {
         this.userName = userName;
     }
     //endregion
@@ -24,7 +24,7 @@ public class UserItem implements Parcelable {
         return countryCode;
     }
 
-    public void setCountryCode(String countryCode) {
+    private void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
     //endregion
@@ -34,23 +34,6 @@ public class UserItem implements Parcelable {
         this.countryCode = countryCode;
     }
 
-    private UserItem(Parcel source) {
-        userName = source.readString();
-    }
-
-    public static final Creator<UserItem> CREATOR = new Creator<UserItem>() {
-        @Override
-        public UserItem createFromParcel(Parcel source) {
-            return new UserItem(source);
-        }
-
-        @Override
-        public UserItem[] newArray(int size) {
-            return new UserItem[size];
-        }
-    };
-
-    //region Overrides
     @Override
     public int describeContents() {
         return 0;
@@ -58,7 +41,22 @@ public class UserItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userName);
+        dest.writeString(this.userName);
+        dest.writeString(this.countryCode);
     }
-    //endregion
+
+    private UserItem(Parcel in) {
+        this.userName = in.readString();
+        this.countryCode = in.readString();
+    }
+
+    public static final Creator<UserItem> CREATOR = new Creator<UserItem>() {
+        public UserItem createFromParcel(Parcel source) {
+            return new UserItem(source);
+        }
+
+        public UserItem[] newArray(int size) {
+            return new UserItem[size];
+        }
+    };
 }

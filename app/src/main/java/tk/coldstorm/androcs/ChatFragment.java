@@ -38,6 +38,7 @@ public class ChatFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public ChatFragment() {
         // Required empty public constructor
     }
