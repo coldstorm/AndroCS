@@ -4,7 +4,35 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class UserItem implements Parcelable {
+
+    //region UserName
     private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    //endregion
+
+    //region CountryCode
+    private String countryCode;
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+    //endregion
+
+    public UserItem(String userName, String countryCode) {
+        this.userName = userName;
+        this.countryCode = countryCode;
+    }
 
     private UserItem(Parcel source) {
         userName = source.readString();

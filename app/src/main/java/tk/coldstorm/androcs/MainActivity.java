@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import tk.coldstorm.androcs.R;
+import tk.coldstorm.androcs.models.UserItem;
 
 public class MainActivity
         extends Activity
@@ -69,7 +70,7 @@ public class MainActivity
             // Set the title to this fragment's title; it will be updated next time restoreActionBar() is called.
             mTitle = content;
         } else if (sender == mRightNavigationDrawerFragment) {
-            showUserDialog(UserDialogFragment.newInstance(content));
+            showUserDialog(UserDialogFragment.newInstance(new UserItem(content, "QQ")));
         }
     }
 

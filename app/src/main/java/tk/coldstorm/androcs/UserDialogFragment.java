@@ -5,17 +5,22 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
+import tk.coldstorm.androcs.models.UserItem;
 
 public class UserDialogFragment extends DialogFragment {
-    private static final String ARG_USER_NAME = "user_name";
+    private static final String ARG_USER_ITEM = "user_item";
 
-    private String mUserName;
+    private UserItem mUserItem;
 
-    public static UserDialogFragment newInstance(String userName) {
+    public static UserDialogFragment newInstance(UserItem userItem) {
         UserDialogFragment userDialogFragment = new UserDialogFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_USER_NAME, userName);
+        args.putParcelable(ARG_USER_ITEM, userItem);
         userDialogFragment.setArguments(args);
         return userDialogFragment;
     }
@@ -30,14 +35,29 @@ public class UserDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         if (getArguments() != null) {
-            mUserName = getArguments().getString(ARG_USER_NAME);
+            mUserItem = getArguments().getParcelable(ARG_USER_ITEM);
         }
 
         // Inflate the dialog with a custom layout
-        builder.setView(inflater.inflate(R.layout.fragment_user_dialog, null));
+        View dialogView = inflater.inflate(R.layout.fragment_user_dialog, null);
+        TextView titleTextView = (TextView) dialogView.findViewById(R.id.user_dialog_title);
+        TextView contentTextView = (TextView) dialogView.findViewById(R.id.user_dialog_content);
 
-        // Set title
-        builder.setTitle(mUserName);
+        // Set the title in using the TextView
+        titleTextView.append(mUserItem.getUserName());
+
+        // Set the dialog text content using the TextView
+        contentTextView.append("Country code: " + mUserItem.getCountryCode() + "\n");
+
+        builder.setView(dialogView);
+
+        // Add close button
+        builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing.
+            }
+        });
 
         return builder.create();
     }
