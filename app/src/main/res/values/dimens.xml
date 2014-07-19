@@ -13,4 +13,7 @@
 
     <dimen name="dialog_title_height">20sp</dimen>
     <dimen name="dialog_title_bottom_margin">15dp</dimen>
+
+    <dimen name="chat_horizontal_margin">15dp</dimen>
+    <dimen name="chat_vertical_margin">15dp</dimen>
 </resources>

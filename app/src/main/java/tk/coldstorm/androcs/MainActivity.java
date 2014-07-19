@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import tk.coldstorm.androcs.R;
+import tk.coldstorm.androcs.models.ChatLine;
 import tk.coldstorm.androcs.models.UserItem;
 
 public class MainActivity
@@ -119,6 +120,9 @@ public class MainActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, replacer)
                 .commit();
+
+        ChatFragment chatFragment = (ChatFragment) replacer;
+        chatFragment.addLine(new ChatLine("00:00", new UserItem("test", "QQ"), "test chat"));
     }
 
     public void showUserDialog(Fragment fragment) {

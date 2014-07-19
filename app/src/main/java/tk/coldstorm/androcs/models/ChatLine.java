@@ -2,19 +2,11 @@ package tk.coldstorm.androcs.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
-
-import java.util.Formatter;
-import java.util.Locale;
-
-import tk.coldstorm.androcs.R;
 
 public class ChatLine implements Parcelable {
 
     //region TimeStamp
+    // TODO: Make this a Calendar object
     private String timeStamp;
 
     public String getTimeStamp() {
@@ -54,19 +46,6 @@ public class ChatLine implements Parcelable {
         this.timeStamp = timeStamp;
         this.userItem = userItem;
         this.chat = chat;
-    }
-
-    public CharSequence toCharSequence() {
-        SpannableString timeStampSpan = new SpannableString(String.format("[%]", timeStamp));
-        timeStampSpan.setSpan(new ForegroundColorSpan(R.color.time_stamp_color), 0, timeStampSpan.length(), 0);
-
-        SpannableString nickNameSpan = new SpannableString(userItem.getUserName());
-        nickNameSpan.setSpan(new ForegroundColorSpan(R.color.chat_color), 0, nickNameSpan.length(), 0);
-
-        SpannableString chatSpan = new SpannableString(chat);
-        chatSpan.setSpan(new ForegroundColorSpan(R.color.chat_color), 0, chatSpan.length(), 0);
-
-        return TextUtils.concat(timeStampSpan + " " + nickNameSpan + " " + chatSpan);
     }
 
     @Override

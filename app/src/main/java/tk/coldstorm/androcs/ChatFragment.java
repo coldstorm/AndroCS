@@ -7,6 +7,13 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import tk.coldstorm.androcs.helpers.ChatLineAdapter;
+import tk.coldstorm.androcs.models.ChatLine;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +28,7 @@ public class ChatFragment extends Fragment {
     private static final String ARG_CHAT_TITLE = "chat_title";
 
     private String mChatTitle;
+    private ArrayList<ChatLine> mChatLines = new ArrayList<ChatLine>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -43,6 +51,10 @@ public class ChatFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void addLine(ChatLine line) {
+        mChatLines.add(line);
+    }
+
     //region Overrides
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,15 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Set the adapter for the ListView
+        ListView chatLinesListView = (ListView) view.findViewById(R.id.chat_lines_list_view);
+        chatLinesListView.setAdapter(new ChatLineAdapter(getActivity(), mChatLines));
     }
 
     @Override
