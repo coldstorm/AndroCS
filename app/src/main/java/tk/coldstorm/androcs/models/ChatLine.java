@@ -31,30 +31,30 @@ public class ChatLine implements Parcelable {
     }
     //endregion
 
-    //region Chat
-    private String chat;
+    //region Text
+    private String text;
 
-    public String getChat() {
-        return chat;
+    public String getText() {
+        return text;
     }
 
-    private void setChat(String chat) {
-        this.chat = chat;
+    private void setText(String text) {
+        this.text = text;
     }
     //endregion
 
-    public ChatLine(long timeStamp, UserItem userItem, String chat) {
+    public ChatLine(long timeStamp, UserItem userItem, String text) {
         this.timeStamp = timeStamp;
         this.userItem = userItem;
-        this.chat = chat;
+        this.text = text;
     }
 
-    public ChatLine(UserItem userItem, String chat) {
+    public ChatLine(UserItem userItem, String text) {
         // Get the current time
         Calendar calendar = Calendar.getInstance();
         this.timeStamp = calendar.getTimeInMillis();
         this.userItem = userItem;
-        this.chat = chat;
+        this.text = text;
     }
 
     @Override
@@ -66,13 +66,13 @@ public class ChatLine implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.timeStamp);
         dest.writeParcelable(this.userItem, 0);
-        dest.writeString(this.chat);
+        dest.writeString(this.text);
     }
 
     private ChatLine(Parcel in) {
         this.timeStamp = in.readLong();
         this.userItem = in.readParcelable(UserItem.class.getClassLoader());
-        this.chat = in.readString();
+        this.text = in.readString();
     }
 
     public static final Parcelable.Creator<ChatLine> CREATOR = new Parcelable.Creator<ChatLine>() {

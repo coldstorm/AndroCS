@@ -43,9 +43,9 @@ public class ChatLineAdapter extends ArrayAdapter<ChatLine> {
         nickNameSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), 0, nickNameSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         nickNameSpan.setSpan(new StyleSpan(Typeface.BOLD), 0, nickNameSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
-        // Create a chat span
-        SpannableString chatSpan = new SpannableString(line.getChat());
-        chatSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), 0, chatSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        // Create a text span
+        SpannableString textSpan = new SpannableString(line.getText());
+        textSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), 0, textSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
         // Build the chat line from the spans
         SpannableStringBuilder chatLineSpan = new SpannableStringBuilder()
@@ -53,7 +53,7 @@ public class ChatLineAdapter extends ArrayAdapter<ChatLine> {
                 .append(" ")
                 .append(nickNameSpan)
                 .append(" ")
-                .append(chatSpan);
+                .append(textSpan);
 
         chatLineTextView.setText(chatLineSpan);
 
