@@ -13,6 +13,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import tk.coldstorm.androcs.helpers.ChatLineAdapter;
+import tk.coldstorm.androcs.models.Chat;
 import tk.coldstorm.androcs.models.ChatLine;
 
 /**
@@ -25,10 +26,9 @@ import tk.coldstorm.androcs.models.ChatLine;
  *
  */
 public class ChatFragment extends Fragment {
-    private static final String ARG_CHAT_TITLE = "chat_title";
+    private static final String STATE_CHAT = "chat";
 
-    private String mChatTitle;
-    private ArrayList<ChatLine> mChatLines = new ArrayList<ChatLine>();
+    private Chat mChat;
 
     private OnFragmentInteractionListener mListener;
 
@@ -36,13 +36,13 @@ public class ChatFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param chatTitle The String title of this chat fragment.
+     * @param chat The Chat model to instantiate this view
      * @return A new instance of fragment ChatFragment.
      */
-    public static ChatFragment newInstance(String chatTitle) {
+    public static ChatFragment newInstance(Chat chat) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_CHAT_TITLE, chatTitle);
+        args.putParcelable(STATE_CHAT, chat);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +51,15 @@ public class ChatFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public void addLine(ChatLine line) {
-        mChatLines.add(line);
-    }
-
     //region Overrides
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mChatTitle = getArguments().getString(ARG_CHAT_TITLE);
+
+        Chat chat = getArguments().getParcelable(STATE_CHAT);
+
+        if (chat != null) {
+            mChat = chat;
         }
     }
 
@@ -77,7 +76,14 @@ public class ChatFragment extends Fragment {
 
         // Set the adapter for the ListView
         ListView chatLinesListView = (ListView) view.findViewById(R.id.chat_lines);
-        chatLinesListView.setAdapter(new ChatLineAdapter(getActivity(), mChatLines));
+        chatLinesListView.setAdapter(new ChatLineAdapter(getActivity(), mChat.getLines()));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the chat lines
+        outState.putParcelable(STATE_CHAT, mChat);
     }
 
     @Override

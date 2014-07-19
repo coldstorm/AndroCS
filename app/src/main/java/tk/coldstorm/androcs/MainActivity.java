@@ -19,7 +19,11 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
 import tk.coldstorm.androcs.R;
+import tk.coldstorm.androcs.models.Chat;
 import tk.coldstorm.androcs.models.ChatLine;
 import tk.coldstorm.androcs.models.IRCUser;
 import tk.coldstorm.androcs.models.UserItem;
@@ -36,6 +40,7 @@ public class MainActivity
     private NavigationDrawerFragment mLeftNavigationDrawerFragment;
     private NavigationDrawerFragment mRightNavigationDrawerFragment;
 
+    private ArrayList<Chat> mChats = new ArrayList<Chat>();
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -51,6 +56,11 @@ public class MainActivity
                 getFragmentManager().findFragmentById(R.id.left_navigation_drawer);
         mRightNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.right_navigation_drawer);
+
+        mChats.add(new Chat("Channel 1", new ArrayList<ChatLine>()));
+        mChats.add(new Chat("Channel 2", new ArrayList<ChatLine>()));
+        mChats.add(new Chat("Channel 3", new ArrayList<ChatLine>()));
+
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -68,7 +78,21 @@ public class MainActivity
     public void onNavigationDrawerItemSelected(NavigationDrawerFragment sender, int position, String content) {
         // Handle the item selection based on the sender
         if (sender == mLeftNavigationDrawerFragment) {
-            replaceFragment(ChatFragment.newInstance(content));
+            // Find the corresponding Chat model
+            Chat selectedChat = null;
+            ChatFragment chatFragment = null;
+            for (Chat chat : mChats) {
+                if (content.equals(chat.getTitle())) {
+                    selectedChat = chat;
+                    break;
+                }
+            }
+
+            if (selectedChat != null) {
+                replaceFragment(ChatFragment.newInstance(selectedChat));
+                selectedChat.addLine(new ChatLine(new UserItem(new IRCUser("test"), "QQ"), String.format("Welcome to %s", selectedChat.getTitle())));
+            }
+
             // Set the title to this fragment's title; it will be updated next time restoreActionBar() is called.
             mTitle = content;
         } else if (sender == mRightNavigationDrawerFragment) {
@@ -123,7 +147,6 @@ public class MainActivity
                 .commit();
 
         ChatFragment chatFragment = (ChatFragment) replacer;
-        chatFragment.addLine(new ChatLine(new UserItem(new IRCUser("test"), "QQ"), "test chat"));
     }
 
     public void showUserDialog(Fragment fragment) {
