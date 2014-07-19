@@ -76,7 +76,7 @@ public class ChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Set the adapter for the ListView
-        ListView chatLinesListView = (ListView) view.findViewById(R.id.chat_lines_list_view);
+        ListView chatLinesListView = (ListView) view.findViewById(R.id.chat_lines);
         chatLinesListView.setAdapter(new ChatLineAdapter(getActivity(), mChatLines));
     }
 

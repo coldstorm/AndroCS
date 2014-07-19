@@ -16,4 +16,6 @@
 
     <dimen name="chat_horizontal_margin">15dp</dimen>
     <dimen name="chat_vertical_margin">15dp</dimen>
+
+    <dimen name="chat_lines_divider_height">3dp</dimen>
 </resources>

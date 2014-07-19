@@ -9,8 +9,10 @@
     tools:context="tk.coldstorm.androcs.ChatFragment">
 
     <ListView
+        android:id="@+id/chat_lines"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/chat_lines_list_view" />
+        android:dividerHeight="@dimen/chat_lines_divider_height"
+        android:divider="@null" />
 
 </FrameLayout>
