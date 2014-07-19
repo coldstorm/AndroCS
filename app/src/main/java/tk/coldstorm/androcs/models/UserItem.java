@@ -5,15 +5,15 @@ import android.os.Parcelable;
 
 public class UserItem implements Parcelable {
 
-    //region UserName
-    private String userName;
+    //region IRCUser
+    private IRCUser ircUser;
 
-    public String getUserName() {
-        return userName;
+    public IRCUser getIRCUser() {
+        return ircUser;
     }
 
-    private void setUserName(String userName) {
-        this.userName = userName;
+    private void setIRCUser(IRCUser ircUser) {
+        this.ircUser = ircUser;
     }
     //endregion
 
@@ -29,8 +29,8 @@ public class UserItem implements Parcelable {
     }
     //endregion
 
-    public UserItem(String userName, String countryCode) {
-        this.userName = userName;
+    public UserItem(IRCUser ircUser, String countryCode) {
+        this.ircUser = ircUser;
         this.countryCode = countryCode;
     }
 
@@ -41,12 +41,12 @@ public class UserItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.userName);
+        dest.writeParcelable(this.ircUser, 0);
         dest.writeString(this.countryCode);
     }
 
     private UserItem(Parcel in) {
-        this.userName = in.readString();
+        this.ircUser = in.readParcelable(IRCUser.class.getClassLoader());
         this.countryCode = in.readString();
     }
 

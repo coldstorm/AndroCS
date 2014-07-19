@@ -34,12 +34,12 @@ public class ChatLineAdapter extends ArrayAdapter<ChatLine> {
         TextView chatLineTextView = (TextView) convertView.findViewById(R.id.chat_line_content);
 
         String timeStampString = String.format("[%1$tH:%1$tM]", line.getTimeStamp());
-        SpannableString chatLineSpan = new SpannableString(String.format("%s %s %s", timeStampString, line.getUserItem().getUserName(), line.getChat()));
+        SpannableString chatLineSpan = new SpannableString(String.format("%s %s %s", timeStampString, line.getUserItem().getIRCUser().getNickName(), line.getChat()));
         // TODO: Clean this up
         int timeStampStart = 0;
         int timeStampEnd = timeStampStart + timeStampString.length();
         int nickNameStart = timeStampEnd + 1;
-        int nickNameEnd = nickNameStart + line.getUserItem().getUserName().length();
+        int nickNameEnd = nickNameStart + line.getUserItem().getIRCUser().getNickName().length();
         int chatStart = nickNameEnd + 1;
         int chatEnd = chatStart + line.getChat().length();
 

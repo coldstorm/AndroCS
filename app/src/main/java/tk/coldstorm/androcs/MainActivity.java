@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import tk.coldstorm.androcs.R;
 import tk.coldstorm.androcs.models.ChatLine;
+import tk.coldstorm.androcs.models.IRCUser;
 import tk.coldstorm.androcs.models.UserItem;
 
 public class MainActivity
@@ -71,7 +72,7 @@ public class MainActivity
             // Set the title to this fragment's title; it will be updated next time restoreActionBar() is called.
             mTitle = content;
         } else if (sender == mRightNavigationDrawerFragment) {
-            showUserDialog(UserDialogFragment.newInstance(new UserItem(content, "QQ")));
+            showUserDialog(UserDialogFragment.newInstance(new UserItem(new IRCUser(content), "QQ")));
         }
     }
 
@@ -122,7 +123,7 @@ public class MainActivity
                 .commit();
 
         ChatFragment chatFragment = (ChatFragment) replacer;
-        chatFragment.addLine(new ChatLine(new UserItem("test", "QQ"), "test chat"));
+        chatFragment.addLine(new ChatLine(new UserItem(new IRCUser("test"), "QQ"), "test chat"));
     }
 
     public void showUserDialog(Fragment fragment) {

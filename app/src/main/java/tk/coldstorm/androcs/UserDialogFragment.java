@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -44,7 +43,7 @@ public class UserDialogFragment extends DialogFragment {
         TextView contentTextView = (TextView) dialogView.findViewById(R.id.user_dialog_content);
 
         // Set the title using the TextView
-        titleTextView.append(mUserItem.getUserName());
+        titleTextView.append(mUserItem.getIRCUser().getNickName());
 
         // Set the dialog text content using the TextView
         contentTextView.append("Country code: " + mUserItem.getCountryCode() + "\n");
