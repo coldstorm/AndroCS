@@ -7,14 +7,12 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import tk.coldstorm.androcs.helpers.ChatLineAdapter;
 import tk.coldstorm.androcs.models.Chat;
-import tk.coldstorm.androcs.models.ChatLine;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +75,30 @@ public class ChatFragment extends Fragment {
         // Set the adapter for the ListView
         ListView chatLinesListView = (ListView) view.findViewById(R.id.chat_lines);
         chatLinesListView.setAdapter(new ChatLineAdapter(getActivity(), mChat.getLines()));
+
+        // Hook up events for EditText
+        EditText chatInputEditText = (EditText) view.findViewById(R.id.chat_input);
+        chatInputEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Get the submit button from the root view
+                ImageButton chatInputSubmitButton = (ImageButton) v.getRootView().findViewById(R.id.chat_input_submit_button);
+                if (hasFocus) {
+                    chatInputSubmitButton.setVisibility(View.VISIBLE);
+                } else {
+                    chatInputSubmitButton.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        // Hook up events for ImageButton
+        ImageButton chatInputSubmitButton = (ImageButton) view.findViewById(R.id.chat_input_submit_button);
+        chatInputSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Send the message
+            }
+        });
     }
 
     @Override

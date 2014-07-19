@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,13 +6,44 @@
     android:paddingRight="@dimen/chat_horizontal_margin"
     android:paddingTop="@dimen/chat_vertical_margin"
     android:paddingBottom="@dimen/chat_vertical_margin"
+    android:orientation="vertical"
     tools:context="tk.coldstorm.androcs.ChatFragment">
 
+    <!-- Chat lines -->
     <ListView
         android:id="@+id/chat_lines"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:dividerHeight="@dimen/chat_lines_divider_height"
         android:divider="@null" />
 
-</FrameLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chat_input_height">
+
+        <!-- Chat input box -->
+        <EditText
+            android:id="@+id/chat_input"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/chat_input_height"
+            android:textSize="@dimen/chat_input_font_size"
+            android:inputType="text"
+            android:fontFamily="sans-serif-light" />
+
+        <!-- Submit button -
+        Hidden until chat input box gets focus -->
+        <ImageButton
+            android:id="@+id/chat_input_submit_button"
+            android:layout_width="@dimen/chat_input_height"
+            android:layout_height="@dimen/chat_input_height"
+            android:src="@android:drawable/ic_menu_send"
+            android:visibility="gone"
+            android:contentDescription="@string/chat_input_submit_button_description"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+
+</LinearLayout>

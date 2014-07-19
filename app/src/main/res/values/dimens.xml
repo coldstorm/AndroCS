@@ -18,4 +18,8 @@
     <dimen name="chat_vertical_margin">15dp</dimen>
 
     <dimen name="chat_lines_divider_height">3dp</dimen>
+
+    <!-- http://www.google.com/design/spec/components/text-fields.html#text-fields-single-line-text-field -->
+    <dimen name="chat_input_font_size">16sp</dimen>
+    <dimen name="chat_input_height">48dp</dimen>
 </resources>
