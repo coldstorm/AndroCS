@@ -3,6 +3,7 @@ package tk.coldstorm.androcs.helpers;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
@@ -33,22 +34,26 @@ public class ChatLineAdapter extends ArrayAdapter<ChatLine> {
 
         TextView chatLineTextView = (TextView) convertView.findViewById(R.id.chat_line_content);
 
-        String timeStampString = String.format("[%1$tH:%1$tM]", line.getTimeStamp());
-        SpannableString chatLineSpan = new SpannableString(String.format("%s %s %s", timeStampString, line.getUserItem().getIRCUser().getNickName(), line.getChat()));
-        // TODO: Clean this up
-        int timeStampStart = 0;
-        int timeStampEnd = timeStampStart + timeStampString.length();
-        int nickNameStart = timeStampEnd + 1;
-        int nickNameEnd = nickNameStart + line.getUserItem().getIRCUser().getNickName().length();
-        int chatStart = nickNameEnd + 1;
-        int chatEnd = chatStart + line.getChat().length();
+        // Create a timestamp span
+        SpannableString timeStampSpan = new SpannableString(String.format("[%1$tH:%1$tM]", line.getTimeStamp()));
+        timeStampSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.time_stamp_color)), 0, timeStampSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
-        chatLineSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.time_stamp_color)), timeStampStart, timeStampEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        // Create a nickname span
+        SpannableString nickNameSpan = new SpannableString(line.getUserItem().getIRCUser().getNickName());
+        nickNameSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), 0, nickNameSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        nickNameSpan.setSpan(new StyleSpan(Typeface.BOLD), 0, nickNameSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
-        chatLineSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), nickNameStart, nickNameEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        chatLineSpan.setSpan(new StyleSpan(Typeface.BOLD), nickNameStart, nickNameEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        // Create a chat span
+        SpannableString chatSpan = new SpannableString(line.getChat());
+        chatSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), 0, chatSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
-        chatLineSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), chatStart, chatEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        // Build the chat line from the spans
+        SpannableStringBuilder chatLineSpan = new SpannableStringBuilder()
+                .append(timeStampSpan)
+                .append(" ")
+                .append(nickNameSpan)
+                .append(" ")
+                .append(chatSpan);
 
         chatLineTextView.setText(chatLineSpan);
 
