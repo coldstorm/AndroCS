@@ -3,17 +3,18 @@ package tk.coldstorm.androcs.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Calendar;
+
 public class ChatLine implements Parcelable {
 
     //region TimeStamp
-    // TODO: Make this a Calendar object
-    private String timeStamp;
+    private long timeStamp;
 
-    public String getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
-    private void setTimeStamp(String timeStamp) {
+    private void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
     //endregion
@@ -42,8 +43,16 @@ public class ChatLine implements Parcelable {
     }
     //endregion
 
-    public ChatLine(String timeStamp, UserItem userItem, String chat) {
+    public ChatLine(long timeStamp, UserItem userItem, String chat) {
         this.timeStamp = timeStamp;
+        this.userItem = userItem;
+        this.chat = chat;
+    }
+
+    public ChatLine(UserItem userItem, String chat) {
+        // Get the current time
+        Calendar calendar = Calendar.getInstance();
+        this.timeStamp = calendar.getTimeInMillis();
         this.userItem = userItem;
         this.chat = chat;
     }
@@ -55,13 +64,13 @@ public class ChatLine implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.timeStamp);
+        dest.writeLong(this.timeStamp);
         dest.writeParcelable(this.userItem, 0);
         dest.writeString(this.chat);
     }
 
     private ChatLine(Parcel in) {
-        this.timeStamp = in.readString();
+        this.timeStamp = in.readLong();
         this.userItem = in.readParcelable(UserItem.class.getClassLoader());
         this.chat = in.readString();
     }

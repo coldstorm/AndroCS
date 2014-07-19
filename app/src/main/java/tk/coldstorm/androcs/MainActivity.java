@@ -122,7 +122,7 @@ public class MainActivity
                 .commit();
 
         ChatFragment chatFragment = (ChatFragment) replacer;
-        chatFragment.addLine(new ChatLine("00:00", new UserItem("test", "QQ"), "test chat"));
+        chatFragment.addLine(new ChatLine(new UserItem("test", "QQ"), "test chat"));
     }
 
     public void showUserDialog(Fragment fragment) {
