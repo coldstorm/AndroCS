@@ -19,9 +19,15 @@
 
         <service
             android:name=".services.IRCService"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="false" >
         </service>
+
+        <receiver
+            android:name=".IRCMessageReceiver"
+            android:enabled="false"
+            android:exported="false" >
+        </receiver>
     </application>
 
 </manifest>

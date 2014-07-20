@@ -3,7 +3,10 @@ package tk.coldstorm.androcs.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
+import tk.coldstorm.androcs.Constants;
 import tk.coldstorm.androcs.models.irc.User;
 
 /**
@@ -32,6 +35,7 @@ public class IRCService extends IntentService {
      * @see IntentService
      */
     public static void startActionConnect(Context context, String serverAddress, String serverPort, User client) {
+        Log.d("IRCService", "startActionConnect");
         Intent intent = new Intent(context, IRCService.class);
         intent.setAction(ACTION_CONNECT);
         intent.putExtra(EXTRA_ADDRESS, serverAddress);
@@ -46,7 +50,21 @@ public class IRCService extends IntentService {
     }
 
     @Override
+    public void onCreate() {
+        Log.d("IRCService", "onCreate");
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("IRCService", "onStartCommand");
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("IRCService", "onHandleIntent");
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {
@@ -65,7 +83,12 @@ public class IRCService extends IntentService {
      */
     private void handleActionConnect(String address, String port, User client) {
         // TODO: Handle action Connect
-        throw new UnsupportedOperationException("Not yet implemented");
+
+        // TODO: Make a parcelable Message model to send as EXTRA_IRC_MESSAGE
+        Intent localIntent = new Intent(Constants.ACTION_IRC_MESSAGE_RECEIVED)
+                .putExtra(Constants.EXTRA_IRC_MESSAGE, "test message");
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
     }
     //endregion
 }

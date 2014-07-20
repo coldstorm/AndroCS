@@ -5,8 +5,11 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +20,7 @@ import tk.coldstorm.androcs.models.Chat;
 import tk.coldstorm.androcs.models.ChatLine;
 import tk.coldstorm.androcs.models.irc.User;
 import tk.coldstorm.androcs.models.UserItem;
+import tk.coldstorm.androcs.services.IRCService;
 
 public class MainActivity
         extends Activity
@@ -35,6 +39,8 @@ public class MainActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+    private IRCMessageReceiver mIRCMessageReceiver;
 
     //region Overrides
     @Override
@@ -62,6 +68,13 @@ public class MainActivity
                 R.id.right_navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout),
                 new String[]{"User 1", "User 2", "User 3"});
+
+        IntentFilter mIRCMessageIntentFilter = new IntentFilter(Constants.ACTION_IRC_MESSAGE_RECEIVED);
+        mIRCMessageReceiver = new IRCMessageReceiver();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mIRCMessageReceiver, mIRCMessageIntentFilter);
+
+        IRCService.startActionConnect(this, "test.com", "7000", new User("test"));
     }
 
     @Override
