@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="chat_background_color">#FF24272E</color>
+    <color name="navigation_drawer_background_color">#FF35373C</color>
     <color name="time_stamp_color">#FF373F4E</color>
     <color name="chat_color">#FFBABBBF</color>
 </resources>

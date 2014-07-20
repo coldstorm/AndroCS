@@ -31,6 +31,7 @@
             android:layout_height="@dimen/chat_input_height"
             android:textSize="@dimen/chat_input_font_size"
             android:inputType="text"
+            android:textColor="@color/chat_color"
             android:fontFamily="sans-serif-light" />
 
         <!-- Submit button -
