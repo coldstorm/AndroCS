@@ -3,17 +3,19 @@ package tk.coldstorm.androcs.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import tk.coldstorm.androcs.models.irc.User;
+
 public class UserItem implements Parcelable {
 
     //region IRCUser
-    private IRCUser ircUser;
+    private User user;
 
-    public IRCUser getIRCUser() {
-        return ircUser;
+    public User getUser() {
+        return user;
     }
 
-    private void setIRCUser(IRCUser ircUser) {
-        this.ircUser = ircUser;
+    private void setUser(User user) {
+        this.user = user;
     }
     //endregion
 
@@ -29,8 +31,8 @@ public class UserItem implements Parcelable {
     }
     //endregion
 
-    public UserItem(IRCUser ircUser, String countryCode) {
-        this.ircUser = ircUser;
+    public UserItem(User user, String countryCode) {
+        this.user = user;
         this.countryCode = countryCode;
     }
 
@@ -41,12 +43,12 @@ public class UserItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.ircUser, 0);
+        dest.writeParcelable(this.user, 0);
         dest.writeString(this.countryCode);
     }
 
     private UserItem(Parcel in) {
-        this.ircUser = in.readParcelable(IRCUser.class.getClassLoader());
+        this.user = in.readParcelable(User.class.getClassLoader());
         this.countryCode = in.readString();
     }
 

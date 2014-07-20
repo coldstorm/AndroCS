@@ -1,9 +1,9 @@
-package tk.coldstorm.androcs.models;
+package tk.coldstorm.androcs.models.irc;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class IRCUser implements Parcelable {
+public class User implements Parcelable {
     //region NickName
     private String nickName;
 
@@ -77,16 +77,20 @@ public class IRCUser implements Parcelable {
     //endregion
 
     //region Constructors
-    public IRCUser(String nickName) {
+    public User() {
+
+    }
+
+    public User(String nickName) {
         this.nickName = nickName;
     }
 
-    public IRCUser(String nickName, String userName) {
+    public User(String nickName, String userName) {
         this.nickName = nickName;
         this.userName = userName;
     }
 
-    public IRCUser(String nickName, String userName, String realName) {
+    public User(String nickName, String userName, String realName) {
         this.nickName = nickName;
         this.userName = userName;
         this.realName = realName;
@@ -108,7 +112,7 @@ public class IRCUser implements Parcelable {
         dest.writeString(this.awayMessage);
     }
 
-    private IRCUser(Parcel in) {
+    private User(Parcel in) {
         this.nickName = in.readString();
         this.userName = in.readString();
         this.hostName = in.readString();
@@ -117,13 +121,13 @@ public class IRCUser implements Parcelable {
         this.awayMessage = in.readString();
     }
 
-    public static final Parcelable.Creator<IRCUser> CREATOR = new Parcelable.Creator<IRCUser>() {
-        public IRCUser createFromParcel(Parcel source) {
-            return new IRCUser(source);
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            return new User(source);
         }
 
-        public IRCUser[] newArray(int size) {
-            return new IRCUser[size];
+        public User[] newArray(int size) {
+            return new User[size];
         }
     };
 }

@@ -43,7 +43,7 @@ public class UserDialogFragment extends DialogFragment {
         TextView contentTextView = (TextView) dialogView.findViewById(R.id.user_dialog_content);
 
         // Set the title using the TextView
-        titleTextView.append(mUserItem.getIRCUser().getNickName());
+        titleTextView.append(mUserItem.getUser().getNickName());
 
         // Set the dialog text content using the TextView
         contentTextView.append("Country code: " + mUserItem.getCountryCode() + "\n");

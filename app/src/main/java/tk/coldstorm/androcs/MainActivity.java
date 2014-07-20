@@ -3,29 +3,19 @@ package tk.coldstorm.androcs;
 import android.app.Activity;
 
 import android.app.ActionBar;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import tk.coldstorm.androcs.R;
 import tk.coldstorm.androcs.models.Chat;
 import tk.coldstorm.androcs.models.ChatLine;
-import tk.coldstorm.androcs.models.IRCUser;
+import tk.coldstorm.androcs.models.irc.User;
 import tk.coldstorm.androcs.models.UserItem;
 
 public class MainActivity
@@ -90,13 +80,13 @@ public class MainActivity
 
             if (selectedChat != null) {
                 replaceFragment(ChatFragment.newInstance(selectedChat));
-                selectedChat.addLine(new ChatLine(new UserItem(new IRCUser("test"), "QQ"), String.format("Welcome to %s", selectedChat.getTitle())));
+                selectedChat.addLine(new ChatLine(new UserItem(new User("test"), "QQ"), String.format("Welcome to %s", selectedChat.getTitle())));
             }
 
             // Set the title to this fragment's title; it will be updated next time restoreActionBar() is called.
             mTitle = content;
         } else if (sender == mRightNavigationDrawerFragment) {
-            showUserDialog(UserDialogFragment.newInstance(new UserItem(new IRCUser(content), "QQ")));
+            showUserDialog(UserDialogFragment.newInstance(new UserItem(new User(content), "QQ")));
         }
     }
 

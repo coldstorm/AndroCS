@@ -43,6 +43,7 @@ public class ChatLine implements Parcelable {
     }
     //endregion
 
+    //region Constructors
     public ChatLine(long timeStamp, UserItem userItem, String text) {
         this.timeStamp = timeStamp;
         this.userItem = userItem;
@@ -56,6 +57,7 @@ public class ChatLine implements Parcelable {
         this.userItem = userItem;
         this.text = text;
     }
+    //endregion
 
     @Override
     public int describeContents() {

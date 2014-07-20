@@ -30,10 +30,12 @@ public class Chat implements Parcelable {
     }
     //endregion
 
+    //region Constructors
     public Chat(String title, ArrayList<ChatLine> lines) {
         this.title = title;
         this.lines = lines;
     }
+    //endregion
 
     public void addLine(ChatLine line) {
         this.lines.add(line);

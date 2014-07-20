@@ -39,7 +39,7 @@ public class ChatLineAdapter extends ArrayAdapter<ChatLine> {
         timeStampSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.time_stamp_color)), 0, timeStampSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
         // Create a nickname span
-        SpannableString nickNameSpan = new SpannableString(line.getUserItem().getIRCUser().getNickName());
+        SpannableString nickNameSpan = new SpannableString(line.getUserItem().getUser().getNickName());
         nickNameSpan.setSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.chat_color)), 0, nickNameSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         nickNameSpan.setSpan(new StyleSpan(Typeface.BOLD), 0, nickNameSpan.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
