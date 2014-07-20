@@ -59,7 +59,7 @@ public class Channel implements Parcelable {
     private Channel(Parcel in) {
         this.name = in.readString();
         this.fullName = in.readString();
-        in.readMap(this.users, Channel.class.getClassLoader());
+        in.readMap(this.users, User.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Channel> CREATOR = new Parcelable.Creator<Channel>() {

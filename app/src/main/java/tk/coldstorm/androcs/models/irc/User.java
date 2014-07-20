@@ -3,6 +3,8 @@ package tk.coldstorm.androcs.models.irc;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.HashMap;
+
 public class User implements Parcelable {
     //region NickName
     private String nickName;
@@ -76,6 +78,14 @@ public class User implements Parcelable {
     }
     //endregion
 
+    //region Channels
+    private HashMap<String, Channel> channels;
+
+    public HashMap<String, Channel> getChannels() {
+        return channels;
+    }
+    //endregion
+
     //region Constructors
     public User() {
 
@@ -110,6 +120,7 @@ public class User implements Parcelable {
         dest.writeString(this.realName);
         dest.writeByte(isAway ? (byte) 1 : (byte) 0);
         dest.writeString(this.awayMessage);
+        dest.writeMap(this.channels);
     }
 
     private User(Parcel in) {
@@ -119,9 +130,10 @@ public class User implements Parcelable {
         this.realName = in.readString();
         this.isAway = in.readByte() != 0;
         this.awayMessage = in.readString();
+        in.readMap(this.channels, Channel.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         public User createFromParcel(Parcel source) {
             return new User(source);
         }
