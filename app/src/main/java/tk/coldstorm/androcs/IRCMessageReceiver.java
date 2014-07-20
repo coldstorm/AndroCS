@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import tk.coldstorm.androcs.models.irc.Message;
+
 public class IRCMessageReceiver extends BroadcastReceiver {
     public IRCMessageReceiver() {
     }
@@ -12,6 +14,7 @@ public class IRCMessageReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO: Actually handle this intent...
-        Log.d("IRCMessageReceiver", "onReceive: " + intent.getStringExtra(Constants.EXTRA_IRC_MESSAGE));
+        Message message = intent.getParcelableExtra(Constants.EXTRA_IRC_MESSAGE);
+        Log.d("IRCMessageReceiver", "onReceive: " + message.getPrefix() + " " + message.getCommand());
     }
 }

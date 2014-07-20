@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import tk.coldstorm.androcs.Constants;
+import tk.coldstorm.androcs.models.irc.Message;
 import tk.coldstorm.androcs.models.irc.User;
 
 /**
@@ -22,12 +23,15 @@ import tk.coldstorm.androcs.models.irc.User;
 public class IRCService extends IntentService {
     //region Actions
     private static final String ACTION_CONNECT = "tk.coldstorm.androcs.services.action.CONNECT";
+    private static final String ACTION_SEND = "tk.coldstorm.androcs.services.action.SEND";
     //endregion
 
     //region Parameters
     private static final String EXTRA_ADDRESS = "tk.coldstorm.androcs.services.extra.ADDRESS";
     private static final String EXTRA_PORT = "tk.coldstorm.androcs.services.extra.PORT";
     private static final String EXTRA_CLIENT = "tk.coldstorm.androcs.services.extra.CLIENT";
+
+    private static final String EXTRA_MESSAGE = "tk.coldstorm.androcs.services.extra.MESSAGE";
     //endregion
 
     private Socket mSocket;
@@ -46,12 +50,18 @@ public class IRCService extends IntentService {
      * @see IntentService
      */
     public static void startActionConnect(Context context, String serverAddress, int serverPort, User client) {
-        Log.d("IRCService", "startActionConnect");
         Intent intent = new Intent(context, IRCService.class);
         intent.setAction(ACTION_CONNECT);
         intent.putExtra(EXTRA_ADDRESS, serverAddress);
         intent.putExtra(EXTRA_PORT, serverPort);
         intent.putExtra(EXTRA_CLIENT, client);
+        context.startService(intent);
+    }
+
+    public static void startActionSend(Context context) {
+        Intent intent = new Intent(context, IRCService.class);
+        intent.setAction(ACTION_SEND);
+        //intent.putExtra(EXTRA_MESSAGE, message);
         context.startService(intent);
     }
     //endregion
@@ -76,6 +86,9 @@ public class IRCService extends IntentService {
                 final int port = intent.getIntExtra(EXTRA_PORT, 6660);
                 final User client = intent.getParcelableExtra(EXTRA_CLIENT);
                 handleActionConnect(address, port, client);
+            } else if (ACTION_SEND.equals(action)) {
+                //final Message message = intent.getParcelableExtra(EXTRA_MESSAGE);
+                //handleActionSend(message);
             }
         }
     }
@@ -114,15 +127,19 @@ public class IRCService extends IntentService {
             }
 
             if (!line.isEmpty()) {
-                // TODO: Make a parcelable Message model to send as EXTRA_IRC_MESSAGE
+                Message parsedMessage = new Message(line);
                 Intent localIntent = new Intent(Constants.ACTION_IRC_MESSAGE_RECEIVED)
-                        .putExtra(Constants.EXTRA_IRC_MESSAGE, line);
+                        .putExtra(Constants.EXTRA_IRC_MESSAGE, parsedMessage);
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
             }
         }
 
         Log.d("IRCService", "Connection closed.");
+    }
+
+    private void handleActionSend() {
+
     }
     //endregion
 }
