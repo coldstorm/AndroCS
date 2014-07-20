@@ -12,6 +12,6 @@ public class IRCMessageReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO: Actually handle this intent...
-        Log.d("IRCMessageReceiver", "onReceive: " + intent);
+        Log.d("IRCMessageReceiver", "onReceive: " + intent.getStringExtra(Constants.EXTRA_IRC_MESSAGE));
     }
 }

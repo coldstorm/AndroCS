@@ -6,6 +6,13 @@ import android.content.Context;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import tk.coldstorm.androcs.Constants;
 import tk.coldstorm.androcs.models.irc.User;
 
@@ -23,6 +30,10 @@ public class IRCService extends IntentService {
     private static final String EXTRA_CLIENT = "tk.coldstorm.androcs.services.extra.CLIENT";
     //endregion
 
+    private Socket mSocket;
+    private PrintWriter mOut;
+    private BufferedReader mIn;
+
     //region Action Helpers
     /**
      * Starts this service to perform a Connect action to an IRC server with the given parameters. If
@@ -34,7 +45,7 @@ public class IRCService extends IntentService {
      * @param client        The User object to use in IRC registration
      * @see IntentService
      */
-    public static void startActionConnect(Context context, String serverAddress, String serverPort, User client) {
+    public static void startActionConnect(Context context, String serverAddress, int serverPort, User client) {
         Log.d("IRCService", "startActionConnect");
         Intent intent = new Intent(context, IRCService.class);
         intent.setAction(ACTION_CONNECT);
@@ -50,14 +61,7 @@ public class IRCService extends IntentService {
     }
 
     @Override
-    public void onCreate() {
-        Log.d("IRCService", "onCreate");
-        super.onCreate();
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("IRCService", "onStartCommand");
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
@@ -69,7 +73,7 @@ public class IRCService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {
                 final String address = intent.getStringExtra(EXTRA_ADDRESS);
-                final String port = intent.getStringExtra(EXTRA_PORT);
+                final int port = intent.getIntExtra(EXTRA_PORT, 6660);
                 final User client = intent.getParcelableExtra(EXTRA_CLIENT);
                 handleActionConnect(address, port, client);
             }
@@ -81,14 +85,44 @@ public class IRCService extends IntentService {
      * Handle action Connect in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionConnect(String address, String port, User client) {
-        // TODO: Handle action Connect
+    private void handleActionConnect(String address, int port, User client) {
+        // Create a socket
+        try {
+            mSocket = new Socket(address, port);
+            mOut = new PrintWriter(mSocket.getOutputStream());
+            mIn = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
+            Log.d("IRCService", "Connection opened");
+        } catch (UnknownHostException ex) {
+            Log.e("IRCService", ex.getMessage());
+        } catch (IOException ex) {
+            Log.e("IRCService", ex.getMessage());
+        }
 
-        // TODO: Make a parcelable Message model to send as EXTRA_IRC_MESSAGE
-        Intent localIntent = new Intent(Constants.ACTION_IRC_MESSAGE_RECEIVED)
-                .putExtra(Constants.EXTRA_IRC_MESSAGE, "test message");
+        // Keep the connection
+        while (mSocket.isConnected() &&
+                !mSocket.isInputShutdown() &&
+                !mSocket.isOutputShutdown()) {
+            String line = "";
+            try {
+                line = mIn.readLine();
+            } catch (IOException ex) {
+                Log.e("IRCService", ex.getMessage());
+            }
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+            if (line == null) {
+                break;
+            }
+
+            if (!line.isEmpty()) {
+                // TODO: Make a parcelable Message model to send as EXTRA_IRC_MESSAGE
+                Intent localIntent = new Intent(Constants.ACTION_IRC_MESSAGE_RECEIVED)
+                        .putExtra(Constants.EXTRA_IRC_MESSAGE, line);
+
+                LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+            }
+        }
+
+        Log.d("IRCService", "Connection closed.");
     }
     //endregion
 }
