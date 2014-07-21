@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 import tk.coldstorm.androcs.models.Chat;
 import tk.coldstorm.androcs.models.ChatLine;
+import tk.coldstorm.androcs.models.irc.Message;
 import tk.coldstorm.androcs.models.irc.User;
 import tk.coldstorm.androcs.models.UserItem;
 import tk.coldstorm.androcs.services.IRCService;
@@ -26,7 +28,9 @@ public class MainActivity
         extends Activity
         implements
             NavigationDrawerFragment.NavigationDrawerCallbacks,
-            ChatFragment.OnFragmentInteractionListener {
+            ChatFragment.OnFragmentInteractionListener,
+            Client.OnClientEventListener {
+    private Client mClient;
 
     /**
      * Fragments managing the behaviors, interactions and presentation of the navigation drawer.
@@ -47,6 +51,12 @@ public class MainActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            mClient = new Client(this);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
         mLeftNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.left_navigation_drawer);
@@ -70,7 +80,7 @@ public class MainActivity
                 new String[]{"User 1", "User 2", "User 3"});
 
         IntentFilter mIRCMessageIntentFilter = new IntentFilter(Constants.ACTION_IRC_MESSAGE_RECEIVED);
-        mIRCMessageReceiver = new IRCMessageReceiver();
+        mIRCMessageReceiver = new IRCMessageReceiver(mClient);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mIRCMessageReceiver, mIRCMessageIntentFilter);
 
@@ -131,6 +141,11 @@ public class MainActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
         //
+    }
+
+    @Override
+    public void onNotice(Message message) {
+        Log.d("MainActivity", "Received NOTICE.");
     }
     //endregion
 
