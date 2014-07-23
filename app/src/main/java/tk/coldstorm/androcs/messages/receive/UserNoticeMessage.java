@@ -1,6 +1,7 @@
-package tk.coldstorm.androcs.messages;
+package tk.coldstorm.androcs.messages.receive;
 
 import tk.coldstorm.androcs.Client;
+import tk.coldstorm.androcs.messages.ReceiveMessage;
 import tk.coldstorm.androcs.models.irc.Message;
 
 public class UserNoticeMessage implements ReceiveMessage {
