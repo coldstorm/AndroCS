@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import tk.coldstorm.androcs.messages.ReceiveMessage;
 import tk.coldstorm.androcs.messages.RegisteredMessage;
-import tk.coldstorm.androcs.messages.UserNoticeMessage;
+import tk.coldstorm.androcs.messages.receive.UserNoticeMessage;
 import tk.coldstorm.androcs.models.irc.Message;
 
 public class Client {
