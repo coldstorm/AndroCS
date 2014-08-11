@@ -17,6 +17,8 @@ import android.support.v4.widget.DrawerLayout;
 
 import java.util.ArrayList;
 
+import tk.coldstorm.androcs.messages.send.NickMessage;
+import tk.coldstorm.androcs.messages.send.UserMessage;
 import tk.coldstorm.androcs.models.Chat;
 import tk.coldstorm.androcs.models.ChatLine;
 import tk.coldstorm.androcs.models.irc.Message;
@@ -85,6 +87,8 @@ public class MainActivity
         LocalBroadcastManager.getInstance(this).registerReceiver(mIRCMessageReceiver, mIRCMessageIntentFilter);
 
         IRCService.startActionConnect(this, "irc.frogbox.es", 6660, new User("test2", "test2", "test2"));
+        IRCService.startActionSend(this, new NickMessage("test2"));
+        IRCService.startActionSend(this, new UserMessage("test2", "test2"));
     }
 
     @Override

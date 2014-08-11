@@ -15,6 +15,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.*;
 
 import tk.coldstorm.androcs.Constants;
+import tk.coldstorm.androcs.messages.SendMessage;
 import tk.coldstorm.androcs.models.irc.Message;
 import tk.coldstorm.androcs.models.irc.User;
 
@@ -65,10 +66,10 @@ public class IRCService extends IntentService {
         context.startService(intent);
     }
 
-    public static void startActionSend(Context context) {
+    public static void startActionSend(Context context, SendMessage message) {
         Intent intent = new Intent(context, IRCService.class);
         intent.setAction(ACTION_SEND);
-        //intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra(EXTRA_MESSAGE, message);
         context.startService(intent);
     }
     //endregion
@@ -99,7 +100,7 @@ public class IRCService extends IntentService {
                     }
                 }).start();
             } else if (ACTION_SEND.equals(action)) {
-                final Message message = intent.getParcelableExtra(EXTRA_MESSAGE);
+                final SendMessage message = intent.getParcelableExtra(EXTRA_MESSAGE);
                 executor.submit(new Runnable() {
                     public void run() {
                         handleActionSend(message);
@@ -154,8 +155,8 @@ public class IRCService extends IntentService {
         Log.d(NAME, "Connection closed.");
     }
 
-    private void handleActionSend(Message message) {
-        //mOut.write(message.)
+    private void handleActionSend(SendMessage message) {
+        message.Send(mOut);
     }
     //endregion
 }
