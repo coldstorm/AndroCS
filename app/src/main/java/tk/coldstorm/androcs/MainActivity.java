@@ -84,7 +84,7 @@ public class MainActivity
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mIRCMessageReceiver, mIRCMessageIntentFilter);
 
-        IRCService.startActionConnect(this, "irc.frogbox.es", 6660, new User("test", "test", "test"));
+        IRCService.startActionConnect(this, "irc.frogbox.es", 6660, new User("test2", "test2", "test2"));
     }
 
     @Override

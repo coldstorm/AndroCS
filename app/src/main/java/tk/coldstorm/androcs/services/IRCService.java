@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.*;
 
 import tk.coldstorm.androcs.Constants;
 import tk.coldstorm.androcs.models.irc.Message;
@@ -37,6 +38,8 @@ public class IRCService extends IntentService {
     //region Log
     private static final String NAME = "IRCService";
     //endregion
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private Socket mSocket;
     private PrintWriter mOut;
@@ -89,10 +92,19 @@ public class IRCService extends IntentService {
                 final String address = intent.getStringExtra(EXTRA_ADDRESS);
                 final int port = intent.getIntExtra(EXTRA_PORT, 6660);
                 final User client = intent.getParcelableExtra(EXTRA_CLIENT);
-                handleActionConnect(address, port, client);
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        handleActionConnect(address, port, client);
+                    }
+                }).start();
             } else if (ACTION_SEND.equals(action)) {
-                //final Message message = intent.getParcelableExtra(EXTRA_MESSAGE);
-                //handleActionSend(message);
+                final Message message = intent.getParcelableExtra(EXTRA_MESSAGE);
+                executor.submit(new Runnable() {
+                    public void run() {
+                        handleActionSend(message);
+                    }
+                });
             }
         }
     }
@@ -142,8 +154,8 @@ public class IRCService extends IntentService {
         Log.d(NAME, "Connection closed.");
     }
 
-    private void handleActionSend() {
-
+    private void handleActionSend(Message message) {
+        //mOut.write(message.)
     }
     //endregion
 }
