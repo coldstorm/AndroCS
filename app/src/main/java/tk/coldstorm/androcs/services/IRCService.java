@@ -34,6 +34,10 @@ public class IRCService extends IntentService {
     private static final String EXTRA_MESSAGE = "tk.coldstorm.androcs.services.extra.MESSAGE";
     //endregion
 
+    //region Log
+    private static final String NAME = "IRCService";
+    //endregion
+
     private Socket mSocket;
     private PrintWriter mOut;
     private BufferedReader mIn;
@@ -67,7 +71,7 @@ public class IRCService extends IntentService {
     //endregion
 
     public IRCService() {
-        super("IRCService");
+        super(NAME);
     }
 
     @Override
@@ -78,7 +82,7 @@ public class IRCService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("IRCService", "onHandleIntent");
+        Log.d(NAME, "onHandleIntent");
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {
@@ -104,11 +108,11 @@ public class IRCService extends IntentService {
             mSocket = new Socket(address, port);
             mOut = new PrintWriter(mSocket.getOutputStream());
             mIn = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
-            Log.d("IRCService", "Connection opened");
+            Log.d(NAME, "Connection opened");
         } catch (UnknownHostException ex) {
-            Log.e("IRCService", ex.getMessage());
+            Log.e(NAME, ex.getMessage());
         } catch (IOException ex) {
-            Log.e("IRCService", ex.getMessage());
+            Log.e(NAME, ex.getMessage());
         }
 
         // Keep the connection
@@ -119,7 +123,7 @@ public class IRCService extends IntentService {
             try {
                 line = mIn.readLine();
             } catch (IOException ex) {
-                Log.e("IRCService", ex.getMessage());
+                Log.e(NAME, ex.getMessage());
             }
 
             if (line == null) {
@@ -135,7 +139,7 @@ public class IRCService extends IntentService {
             }
         }
 
-        Log.d("IRCService", "Connection closed.");
+        Log.d(NAME, "Connection closed.");
     }
 
     private void handleActionSend() {
