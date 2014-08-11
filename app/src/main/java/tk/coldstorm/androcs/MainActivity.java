@@ -145,7 +145,6 @@ public class MainActivity
 
     @Override
     public void onNotice(Message message) {
-        Log.d("MainActivity", "Received NOTICE.");
     }
     //endregion
 

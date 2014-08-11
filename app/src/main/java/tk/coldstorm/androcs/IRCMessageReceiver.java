@@ -3,6 +3,7 @@ package tk.coldstorm.androcs;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -20,6 +21,7 @@ public class IRCMessageReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: Actually handle this intent...
         Message message = intent.getParcelableExtra(Constants.EXTRA_IRC_MESSAGE);
+        Log.d("IRCMessageReceiver", String.format("> %s", message.getRaw()));
 
         for (RegisteredMessage registeredMessage : mClient.mRegisteredMessages) {
             try {
