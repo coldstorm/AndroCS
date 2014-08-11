@@ -11,6 +11,7 @@ import tk.coldstorm.androcs.models.irc.Message;
 
 public class IRCMessageReceiver extends BroadcastReceiver {
     private Client mClient;
+    public IRCMessageReceiver() {}
     public IRCMessageReceiver(Client client) {
         mClient = client;
     }
