@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Chat implements Parcelable {
     //region Title
@@ -19,9 +20,9 @@ public class Chat implements Parcelable {
     //endregion
 
     //region Lines
-    private ArrayList<ChatLine> lines;
+    private List<ChatLine> lines;
 
-    public ArrayList<ChatLine> getLines() {
+    public List<ChatLine> getLines() {
         return lines;
     }
 
@@ -49,12 +50,12 @@ public class Chat implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.title);
-        dest.writeSerializable(this.lines);
+        dest.writeList(this.lines);
     }
 
     private Chat(Parcel in) {
         this.title = in.readString();
-        this.lines = (ArrayList<ChatLine>) in.readSerializable();
+        in.readList(this.lines, ChatLine.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Chat> CREATOR = new Parcelable.Creator<Chat>() {

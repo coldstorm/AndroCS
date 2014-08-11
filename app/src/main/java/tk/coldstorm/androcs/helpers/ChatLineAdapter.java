@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import tk.coldstorm.androcs.R;
 import tk.coldstorm.androcs.models.ChatLine;
 
 public class ChatLineAdapter extends ArrayAdapter<ChatLine> {
-    public ChatLineAdapter(Context context, ArrayList<ChatLine> chatLines) {
+    public ChatLineAdapter(Context context, List<ChatLine> chatLines) {
         super(context, R.layout.item_chat_line, chatLines);
     }
 
