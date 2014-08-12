@@ -149,7 +149,7 @@ public class MainActivity
 
     @Override
     public void onWelcome() {
-        IRCService.startActionSend(this, new JoinMessage("test"));
+        IRCService.startActionSend(this, new JoinMessage("#test"));
     }
 
     @Override

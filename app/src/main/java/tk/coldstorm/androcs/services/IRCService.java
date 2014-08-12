@@ -42,11 +42,11 @@ public class IRCService extends IntentService {
     private static final String NAME = "IRCService";
     //endregion
 
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    private Socket mSocket;
-    private PrintWriter mOut;
-    private BufferedReader mIn;
+    private static Socket mSocket;
+    private static PrintWriter mOut;
+    private static BufferedReader mIn;
 
     //region Action Helpers
     /**
