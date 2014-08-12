@@ -91,17 +91,14 @@ public class IRCService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {
-                final String address = intent.getStringExtra(EXTRA_ADDRESS);
-                final int port = intent.getIntExtra(EXTRA_PORT, 6660);
-                final User client = intent.getParcelableExtra(EXTRA_CLIENT);
+                String address = intent.getStringExtra(EXTRA_ADDRESS);
+                int port = intent.getIntExtra(EXTRA_PORT, 6660);
+                User client = intent.getParcelableExtra(EXTRA_CLIENT);
 
-                new Thread(new Runnable() {
-                    public void run() {
-                        handleActionConnect(address, port, client);
-                    }
-                }).start();
+                startConnectThread(address, port, client);
             } else if (ACTION_SEND.equals(action)) {
                 final SendMessage message = intent.getParcelableExtra(EXTRA_MESSAGE);
+
                 executor.submit(new Runnable() {
                     public void run() {
                         handleActionSend(message);
@@ -111,12 +108,20 @@ public class IRCService extends IntentService {
         }
     }
 
+    public static void startConnectThread(final String address, final int port, final User client) {
+        new Thread(new Runnable() {
+            public void run() {
+             handleActionConnect(address, port, client);
+            }
+        }).start();
+    }
+
     //region Action Handlers
     /**
      * Handle action Connect in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionConnect(String address, int port, User client) {
+    private static void handleActionConnect(String address, int port, User client) {
         // Create a socket
         try {
             mSocket = new Socket(address, port);
@@ -159,7 +164,7 @@ public class IRCService extends IntentService {
         Log.d(NAME, "Connection closed.");
     }
 
-    private void handleActionSend(SendMessage message) {
+    private static void handleActionSend(SendMessage message) {
         message.Send(mOut);
     }
     //endregion
