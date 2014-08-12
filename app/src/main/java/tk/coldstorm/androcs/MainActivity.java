@@ -17,6 +17,8 @@ import android.support.v4.widget.DrawerLayout;
 
 import java.util.ArrayList;
 
+import tk.coldstorm.androcs.messages.SendMessage;
+import tk.coldstorm.androcs.messages.send.JoinMessage;
 import tk.coldstorm.androcs.messages.send.NickMessage;
 import tk.coldstorm.androcs.messages.send.UserMessage;
 import tk.coldstorm.androcs.models.Chat;
@@ -146,9 +148,8 @@ public class MainActivity
     }
 
     @Override
-    public void onConnect() {
-        IRCService.startActionSend(this, new NickMessage("test2"));
-        IRCService.startActionSend(this, new UserMessage("test2", "test2"));
+    public void onWelcome() {
+        IRCService.startActionSend(this, new JoinMessage("test"));
     }
 
     @Override

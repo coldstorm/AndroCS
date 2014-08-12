@@ -16,6 +16,8 @@ import java.util.concurrent.*;
 
 import tk.coldstorm.androcs.Constants;
 import tk.coldstorm.androcs.messages.SendMessage;
+import tk.coldstorm.androcs.messages.send.NickMessage;
+import tk.coldstorm.androcs.messages.send.UserMessage;
 import tk.coldstorm.androcs.models.irc.Message;
 import tk.coldstorm.androcs.models.irc.User;
 
@@ -118,8 +120,11 @@ public class IRCService extends IntentService {
         // Create a socket
         try {
             mSocket = new Socket(address, port);
-            mOut = new PrintWriter(mSocket.getOutputStream());
+            mOut = new PrintWriter(mSocket.getOutputStream(), true);
             mIn = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
+
+            new NickMessage(client).Send(mOut);
+            new UserMessage(client).Send(mOut);
             Log.d(NAME, "Connection opened");
         } catch (UnknownHostException ex) {
             Log.e(NAME, ex.getMessage());
