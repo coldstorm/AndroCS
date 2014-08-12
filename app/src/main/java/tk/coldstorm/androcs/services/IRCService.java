@@ -18,6 +18,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.*;
 
 import tk.coldstorm.androcs.Constants;
+import tk.coldstorm.androcs.helpers.IRCWriter;
 import tk.coldstorm.androcs.messages.SendMessage;
 import tk.coldstorm.androcs.messages.send.NickMessage;
 import tk.coldstorm.androcs.messages.send.UserMessage;
@@ -51,7 +52,7 @@ public class IRCService extends Service {
     private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
 
     private Socket mSocket;
-    private PrintWriter mOut;
+    private IRCWriter mOut;
     private BufferedReader mIn;
 
     //region Action Helpers
@@ -152,7 +153,7 @@ public class IRCService extends Service {
         // Create a socket
         try {
             mSocket = new Socket(address, port);
-            mOut = new PrintWriter(mSocket.getOutputStream(), true);
+            mOut = new IRCWriter(mSocket.getOutputStream(), true);
             mIn = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 
             new NickMessage(client).Send(mOut);

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import tk.coldstorm.androcs.messages.SendMessage;
 import tk.coldstorm.androcs.messages.send.JoinMessage;
 import tk.coldstorm.androcs.messages.send.NickMessage;
+import tk.coldstorm.androcs.messages.send.PongMessage;
 import tk.coldstorm.androcs.messages.send.UserMessage;
 import tk.coldstorm.androcs.models.Chat;
 import tk.coldstorm.androcs.models.ChatLine;
@@ -154,6 +155,11 @@ public class MainActivity
 
     @Override
     public void onNotice(Message message) {
+    }
+
+    @Override
+    public void onPing(String source) {
+        IRCService.startActionSend(this, new PongMessage(source));
     }
     //endregion
 
