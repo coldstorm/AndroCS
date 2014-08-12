@@ -1,8 +1,11 @@
 package tk.coldstorm.androcs.services;
 
 import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
 import android.content.Context;
+import android.os.*;
+import android.os.Process;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -24,7 +27,7 @@ import tk.coldstorm.androcs.models.irc.User;
 /**
  * An {@link IntentService} subclass for handling IRC tasks.
  */
-public class IRCService extends IntentService {
+public class IRCService extends Service {
     //region Actions
     private static final String ACTION_CONNECT = "tk.coldstorm.androcs.services.action.CONNECT";
     private static final String ACTION_SEND = "tk.coldstorm.androcs.services.action.SEND";
@@ -42,11 +45,14 @@ public class IRCService extends IntentService {
     private static final String NAME = "IRCService";
     //endregion
 
-    private static ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Looper mServiceLooper;
+    private ServiceHandler mServiceHandler;
 
-    private static Socket mSocket;
-    private static PrintWriter mOut;
-    private static BufferedReader mIn;
+    private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
+
+    private Socket mSocket;
+    private PrintWriter mOut;
+    private BufferedReader mIn;
 
     //region Action Helpers
     /**
@@ -76,30 +82,59 @@ public class IRCService extends IntentService {
     }
     //endregion
 
-    public IRCService() {
-        super(NAME);
+    private final class ServiceHandler extends Handler {
+        public ServiceHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            onHandleIntent((Intent)msg.obj);
+        }
+    }
+
+    @Override
+    public void onCreate() {
+        HandlerThread thread = new HandlerThread("IRCServiceHandler", Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+
+        mServiceLooper = thread.getLooper();
+        mServiceHandler = new ServiceHandler(mServiceLooper);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
+        //super.onStartCommand(intent, flags, startId);
+        android.os.Message msg = mServiceHandler.obtainMessage();
+        msg.arg1 = startId;
+        msg.obj = intent;
+        mServiceHandler.handleMessage(msg);
         return START_STICKY;
     }
 
     @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {
-                String address = intent.getStringExtra(EXTRA_ADDRESS);
-                int port = intent.getIntExtra(EXTRA_PORT, 6660);
-                User client = intent.getParcelableExtra(EXTRA_CLIENT);
+                final String address = intent.getStringExtra(EXTRA_ADDRESS);
+                final int port = intent.getIntExtra(EXTRA_PORT, 6660);
+                final User client = intent.getParcelableExtra(EXTRA_CLIENT);
 
-                startConnectThread(address, port, client);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleActionConnect(address, port, client);
+                    }
+                }).start();
             } else if (ACTION_SEND.equals(action)) {
                 final SendMessage message = intent.getParcelableExtra(EXTRA_MESSAGE);
 
-                executor.submit(new Runnable() {
+                mExecutor.submit(new Runnable() {
                     public void run() {
                         handleActionSend(message);
                     }
@@ -108,20 +143,12 @@ public class IRCService extends IntentService {
         }
     }
 
-    public static void startConnectThread(final String address, final int port, final User client) {
-        new Thread(new Runnable() {
-            public void run() {
-             handleActionConnect(address, port, client);
-            }
-        }).start();
-    }
-
     //region Action Handlers
     /**
      * Handle action Connect in the provided background thread with the provided
      * parameters.
      */
-    private static void handleActionConnect(String address, int port, User client) {
+    private void handleActionConnect(String address, int port, User client) {
         // Create a socket
         try {
             mSocket = new Socket(address, port);
@@ -164,7 +191,7 @@ public class IRCService extends IntentService {
         Log.d(NAME, "Connection closed.");
     }
 
-    private static void handleActionSend(SendMessage message) {
+    private void handleActionSend(SendMessage message) {
         message.Send(mOut);
     }
     //endregion
