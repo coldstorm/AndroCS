@@ -87,8 +87,6 @@ public class MainActivity
         LocalBroadcastManager.getInstance(this).registerReceiver(mIRCMessageReceiver, mIRCMessageIntentFilter);
 
         IRCService.startActionConnect(this, "irc.frogbox.es", 6660, new User("test2", "test2", "test2"));
-        IRCService.startActionSend(this, new NickMessage("test2"));
-        IRCService.startActionSend(this, new UserMessage("test2", "test2"));
     }
 
     @Override
@@ -145,6 +143,12 @@ public class MainActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
         //
+    }
+
+    @Override
+    public void onConnect() {
+        IRCService.startActionSend(this, new NickMessage("test2"));
+        IRCService.startActionSend(this, new UserMessage("test2", "test2"));
     }
 
     @Override

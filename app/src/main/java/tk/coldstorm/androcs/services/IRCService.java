@@ -86,7 +86,6 @@ public class IRCService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(NAME, "onHandleIntent");
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {

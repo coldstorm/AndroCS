@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import tk.coldstorm.androcs.messages.ReceiveMessage;
 import tk.coldstorm.androcs.messages.RegisteredMessage;
+import tk.coldstorm.androcs.messages.receive.ConnectionMessage;
 import tk.coldstorm.androcs.messages.receive.UserNoticeMessage;
 import tk.coldstorm.androcs.models.irc.Message;
 
@@ -14,11 +15,22 @@ public class Client {
     protected OnClientEventListener mListener;
     protected ArrayList<RegisteredMessage> mRegisteredMessages;
 
+    private boolean connected;
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    private void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
     public Client(Activity activity) throws NoSuchMethodException {
         mListener = (OnClientEventListener) activity;
         mRegisteredMessages = new ArrayList<RegisteredMessage>();
 
         this.RegisterMessage(UserNoticeMessage.class);
+        this.RegisterMessage(ConnectionMessage.class);
     }
 
     public void RegisterMessage(Class messageClass) throws NoSuchMethodException {
@@ -31,7 +43,15 @@ public class Client {
         }
     }
 
+    public void onConnect() {
+        if (mListener != null) {
+            mListener.onConnect();
+            setConnected(true);
+        }
+    }
+
     public interface OnClientEventListener {
         public void onNotice(Message message);
+        public void onConnect();
     }
 }
